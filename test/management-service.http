@@ -1,0 +1,13 @@
+# In the following requests the variable baseUrl is used.
+# Its value is set here.
+@baseUrl = http://localhost:35839
+
+
+
+### ------------------------------------------------------------------------
+# Get all books
+GET {{baseUrl}}/odata/v4/management/TransferRequestSet
+
+### ------------------------------------------------------------------------
+# Get all books
+GET {{baseUrl}}/odata/v4/management/TransferRequestLogSet
