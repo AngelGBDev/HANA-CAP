@@ -1,19 +1,11 @@
-// Import the cds facade object (https://cap.cloud.sap/docs/node.js/cds-facade)
 const cds = require('@sap/cds');
-const { log } = require('console');
 const {v4: uuidv4} = require('uuid');
+const { executeHttpRequest } = require('@sap-cloud-sdk/core')
 
-// The service implementation with all service handlers
-module.exports = cds.service.impl(async function() {
-
-    // Define constants for the Risk and BusinessPartner entities from the risk-service.cds file
-    const { TransferRequestSet, TransferRequestLogSet } = this.entities;
-
-    // this.before("CREATE", TransferRequestSet, async (req) => {        
-    //     if (req.data ) {
-    //         req.data.id = randomUUID;
-    //     }
-    // })
+class ManagementService extends cds.ApplicationService {
+  /** Registering custom event handlers */
+  init() {
+    const { TransferRequestSet, TransferRequestLogSet, PrediosSet, UserSet } = this.entities;
 
     this.after("CREATE", TransferRequestSet, async (data) => {        
         
@@ -35,49 +27,96 @@ module.exports = cds.service.impl(async function() {
             return {created: affectedRows === 1, result: oEntry};
 
         }
-    })
+    });
+    
+    this.before("READ", PrediosSet, async (req) => {        
+        
+        let { token } = await this.getToken();
+        let data = await this.getPredios();
 
-});
+    });
 
+    this.on("READ", UserSet, async (req) => {        
+        
+        const users = await executeHttpRequest({ destinationName: 'ias' },
+        { method: 'get', url: '/scim/Users', params: {} })
+        console.log("iasUsers", users.data)
 
-/*
-const cds = require('@sap/cds');
+    });
 
-class ManagementService extends cds.ApplicationService {
-    async init() {
-        const { TransferRequestSet } = this.entities;
+    return super.init();
+  }
 
-        if (!TransferRequestSet) {
-            console.error("Entity TransferRequestSet not found");
-            return super.init();
+  async getToken(){
+    const sUrl = `https://araucaria-qas.arauco.com/portal/sharing/rest/generateToken`;
+    const params = {
+        username: 'iquant',
+        password: 'iquant2024',
+        referer: 'http://www.arcgis.com',
+        f: 'json'
+    };
+
+    const formBody = new URLSearchParams(params);
+
+    try {
+        const response = await fetch(sUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: formBody
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        console.log("Registering CREATE handler for TransferRequestSet");
+        const data = await response.json();
 
-        this.on(['CREATE'], TransferRequestSet, this.saveLog);
-
-        console.log("Initialization complete");
-
-        return super.init();
+        return data;
+    } catch (error) {
+        console.error('Error:', error);
+        return null;
     }
+  }
 
-    async saveLog(req) {
-        try {
-            console.log("CREATE event received with data:", req.data);
+  async getPredios(token){
+    const sUrl = `https://araucaria-qas.arauco.com/server/rest/services/Integraciones/CanchasBTP/MapServer/0/query`;
+    const params = {
+        token,
+        outfields: '*',
+        returngeometry: false,
+        where: 'idzona>0',
+        f: 'json'
+    };
 
-            // Implement your logic to handle the creation event
-            // For example, save log data to a database or perform other actions
+    const queryString = new URLSearchParams(params);
+    // .toString();
+    // const requestUrl = `${sUrl}?${queryString}`;
 
-            console.log("CREATE event handled successfully");
+    try {
+        const response = await fetch(sUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: queryString
+        });
 
-            return req.data;  // Respond with the request data or some result
-        } catch (error) {
-            console.error("Error handling CREATE event:", error);
-            req.error(500, `Internal Server Error: ${error.message}`);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
+
+        const data = await response.json();
+
+        console.log('Query Result:', data);
+        return data;
+    } catch (error) {
+        console.error('Error:', error);
+        return null;
     }
+  }
+  
 }
 
-module.exports = ManagementService;
-
-*/
+module.exports = { ManagementService };

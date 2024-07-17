@@ -1,15 +1,16 @@
 {
-  "name": "equipment-transfer-management",
+  "name": "equipment-transfer-backend",
   "version": "1.0.0",
   "description": "A simple CAP project.",
   "repository": "<Add your repository here>",
   "license": "UNLICENSED",
   "private": true,
   "dependencies": {
+    "@sap-cloud-sdk/core": "^1.54.2",
     "@sap/cds": "^7",
-    "express": "^4",
+    "@sap/cds-hana": "^2",
     "@sap/xssec": "^3",
-    "@sap/cds-hana": "^2",    
+    "express": "^4",
     "uuid": "^9.0.1"
   },
   "devDependencies": {
@@ -19,16 +20,28 @@
     "eslint": "^9"
   },
   "scripts": {
-    "all": "cds build && mbt build && npm run deploy",
     "start": "cds-serve",
-    "undeploy": "cf undeploy equipment-transfer-management --delete-services --delete-service-keys --delete-service-brokers -f",
-    "deploy": "cf deploy mta_archives/equipment-transfer-management_1.0.0.mtar",
+    "build": "cds build --for hana",
+    "deploy:cds": "cds deploy --to hana --profile hybrid",
+    "all": "npm run build && mbt build && npm run deploy",
+    "undeploy": "cf undeploy equipment-transfer-backend --delete-services --delete-service-keys --delete-service-brokers -f",
+    "deploy": "cf deploy mta_archives/equipment-transfer-backend_1.0.0.mtar",
     "redeploy": "npm run undeploy && npm run deploy"
   },
   "cds": {
     "requires": {
       "auth": "dummy",
-      "db": "hana"
+      "db": "hana",
+      "[hybrid]": {
+        "db": "hana"
+      },
+      "ias": {
+        "kind": "rest",
+        "credentials": {
+          "destination": "ias",
+          "requestTimeout": 30000
+        }
+      }
     }
   }
 }

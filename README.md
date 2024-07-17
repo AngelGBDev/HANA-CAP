@@ -24,11 +24,17 @@ File or Folder | Purpose
 
 Learn more at https://cap.cloud.sap/docs/get-started/.
 
-cds bind -2 equipment-transfer-management-dev:SharedDevKey
+cds bind -2 equipment-transfer-backend-dev:SharedDevKey
 
-cf create-service xsuaa application equipment-transfer-management-auth -c xs-security.json
-cf create-service-key equipment-transfer-management-auth default  
+cf create-service xsuaa application equipment-transfer-backend-auth -c xs-security.json
+cf create-service-key equipment-transfer-backend-auth default  
 cds watch --profile hybrid
 cds bind --exec -- npm start --prefix app/router
 
-git credential-cache exit
+cds deploy --to hana:equipment-transfer-backend
+
+# This will remove the latest commit and keep the changes in your working directory
+git reset --soft HEAD~1
+
+# This will remove the latest commit and discard the changes
+git reset --hard HEAD~1

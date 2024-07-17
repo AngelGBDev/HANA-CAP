@@ -1,4 +1,4 @@
-# CAP equipment-transfer-management
+# CAP equipment-transfer-backend
 _out
 *.db
 *.sqlite
@@ -32,6 +32,3 @@ mta_archives/
 
 # @cap-js/cds-typer
 @cds-models
-
-# auto generated wildcard
-db/.env

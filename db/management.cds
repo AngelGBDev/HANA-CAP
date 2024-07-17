@@ -1,5 +1,5 @@
 // using {db.types} from '../../../db/types';
-using {managed} from '@sap/cds/common';
+using {managed, sap.common.CodeList} from '@sap/cds/common';
 
 namespace db.models;
 
@@ -8,14 +8,6 @@ entity LogSet: managed {
         description     : String;        
         status          : Association to models.TransferStatusSet;
         transferRequest : Association to models.TransferRequestSet;
-}
-
-entity TransferRequestLogSet: managed {
-    key id                  : UUID;
-        // idTransferRequest   : String;
-        // idStatus            : String;
-        status              : Association to models.TransferStatusSet;
-        transferRequest     : Association to models.TransferRequestSet;
 }
 
 entity PermitDocumentSet : managed {
@@ -106,15 +98,37 @@ entity TransferTypeSet {
         description : String;
 }
 
-entity UserSet {
+entity UserSet: managed {
     key id            : UUID;
         name          : String;
         email         : String;
-        isArauco      : Boolean;
-        isExternal    : Boolean;
-        isRequester   : Boolean;
-        isOperator    : Boolean;
-        isCentral     : Boolean;
-        isTransporter : Boolean;
-        isReceiver    : Boolean;
+        rol           : String;
+        roles         : Association to RolSet on rol = $self.rol;
 }
+
+entity TransferRequestLogSet: managed {
+    key id                  : UUID;
+        // idTransferRequest   : String;
+        // idStatus            : String;
+        status              : Association to models.TransferStatusSet;
+        transferRequest     : Association to models.TransferRequestSet;
+}
+
+entity PredioSet: managed {    
+    key id                  : UUID;
+};
+
+entity RolSet {
+    key rol         : String;
+        description : String;
+}
+
+view UserRolViewSet as
+    select from models.UserSet as User
+    join models.RolSet as Rol
+    on User.rol = Rol.rol {
+        User.name,
+        User.email,
+        Rol.rol,
+        User.createdAt
+    };

@@ -1,5 +1,5 @@
 {
-  "xsappname": "equipment-transfer-management",
+  "xsappname": "equipment-transfer-backend",
   "tenant-mode": "dedicated",
   "scopes": [],
   "attributes": [],
@@ -10,14 +10,14 @@
         "x509"
     ],
     "redirect-uris": [
-        "https://*.applicationstudio.cloud.sap/**",
-        "https://dev-qas-arauco-*.cfapps.us10.hana.ondemand.com/**",
-        "https://*.cfapps.us10.hana.ondemand.com/**",
-        "http://localhost:5000/**",
-        "http://localhost:4004/**",        
-        "https://arauco-*.cfapps.us10.hana.ondemand.com/**",
-        "https://*-arauco-*.cfapps.us10.hana.ondemand.com/**",
-        "https://*/**"
+      "https://*.applicationstudio.cloud.sap/**",
+      "https://dev-qas-arauco-*.cfapps.us10.hana.ondemand.com/**",
+      "https://*.cfapps.us10.hana.ondemand.com/**",
+      "http://localhost:5000/**",
+      "http://localhost:4004/**",        
+      "https://arauco-*.cfapps.us10.hana.ondemand.com/**",
+      "https://*-arauco-*.cfapps.us10.hana.ondemand.com/**",
+      "https://*/**"
     ]
   }
 }
