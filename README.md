@@ -24,7 +24,7 @@ File or Folder | Purpose
 
 Learn more at https://cap.cloud.sap/docs/get-started/.
 
-cds bind -2 equipment-transfer-backend-dev:SharedDevKey
+cds bind -2 HANA-CAP-dev:SharedDevKey
 
 cf create-service xsuaa application equipment-transfer-backend-auth -c xs-security.json
 cf create-service-key equipment-transfer-backend-auth default  

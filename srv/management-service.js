@@ -37,10 +37,10 @@ class ManagementService extends cds.ApplicationService {
     });
 
     this.on("READ", UserSet, async (req) => {        
-        
-        const users = await executeHttpRequest({ destinationName: 'ias' },
-        { method: 'get', url: '/scim/Users', params: {} })
-        console.log("iasUsers", users.data)
+        // TODO
+        // const users = await executeHttpRequest({ destinationName: 'ias' },
+        // { method: 'get', url: '/scim/Users', params: {} })
+        // console.log("iasUsers", users.data)
 
     });
 
@@ -89,6 +89,15 @@ class ManagementService extends cds.ApplicationService {
         where: 'idzona>0',
         f: 'json'
     };
+    // const params = {
+    //     token,
+    //     outfields: 'idpredio,predio',
+    //     returngeometry: false,
+    //     where: 'objectid!=0',
+    //     orderByFields: 'idpredio,predio',
+    //     returnDistinctValues: true,
+    //     f: 'json'
+    // };
 
     const queryString = new URLSearchParams(params);
     // .toString();
@@ -112,6 +121,11 @@ class ManagementService extends cds.ApplicationService {
         console.log('Query Result:', data);
         return data;
     } catch (error) {
+        console.error('Error:', error);
+        console.error('Error:', error);
+        console.error('Error:', error);
+        console.error('Error:', error);
+        console.error('Error:', error);
         console.error('Error:', error);
         return null;
     }

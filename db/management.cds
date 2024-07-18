@@ -85,7 +85,6 @@ entity TransferRequestSet : managed {
 
 entity TransferStatusSet {
     key id          : String(50);
-        idSap       : String;
         description : String;
 }
 
@@ -94,7 +93,6 @@ entity TransferTypeSet {
             EQUIPMENT = 'EQUIPMENT';
             BACKREST  = 'BACKREST';
         };
-        idSap       : String;
         description : String;
 }
 
