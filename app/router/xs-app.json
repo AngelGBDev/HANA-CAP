@@ -17,7 +17,7 @@
       "cacheControl": "no-cache, no-store, must-revalidate"
     },
     {
-      "source": "^/user-api/(.*)",
+      "source": "^/user-api(.*)",
       "target": "$1",
       "service": "sap-approuter-userapi"
     },
@@ -25,8 +25,8 @@
       "source": "^/(.*)$",
       "target": "$1",
       "destination": "srv-api",
-      "csrfProtection": true
+      "csrfProtection": true,
+      "authenticationType": "xsuaa"
     }
-  ],
-  "welcomeFile": "app/index.html"
+  ]
 }

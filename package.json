@@ -10,8 +10,11 @@
     "@sap/cds": "^7",
     "@sap/cds-hana": "^2",
     "@sap/xssec": "^3",
+    "axios": "^1.7.2",
     "express": "^4",
-    "uuid": "^9.0.1"
+    "uuid": "^9.0.1",
+    "xml-js": "^1.6.11",
+    "xml2js": "^0.6.2"
   },
   "devDependencies": {
     "@cap-js/sqlite": "^1",
@@ -26,22 +29,37 @@
     "all": "npm run build && mbt build && npm run deploy",
     "undeploy": "cf undeploy equipment-transfer-backend --delete-services --delete-service-keys --delete-service-brokers -f",
     "deploy": "cf deploy mta_archives/equipment-transfer-backend_1.0.0.mtar",
-    "redeploy": "npm run undeploy && npm run deploy"
+    "redeploy": "npm run undeploy && npm run all"
   },
   "cds": {
     "requires": {
       "auth": "dummy",
       "db": "hana",
-      "[hybrid]": {
-        "db": "hana"
+      "ZPM_FOR_TRASLADO_SRV": {
+        "kind": "odata",
+        "model": "srv/external/SAP_CORP",
+        "credentials": {
+          "destination": "SAP_CORP"
+        }
       },
-      "ias": {
+      "MII_SERV": {
         "kind": "rest",
         "credentials": {
-          "destination": "ias",
-          "requestTimeout": 30000
+          "url": "https://reservasqas.arauco.com/XMII/SOAPRunner/IPFOREST/TRANSACTION/Mantenimiento"
         }
-      }
+      },
+      "ARCGIS_SERV":{
+        "kind": "rest",
+        "credentials": {
+          "url": "https://araucaria-qas.arauco.com/server/rest/services/Integraciones/CanchasBTP/MapServer/0/query"
+        }
+      },
+      "ARCGIS_TOKEN_SERV":{
+        "kind": "rest",
+        "credentials": {
+          "url": "https://araucaria-qas.arauco.com/portal/sharing/rest/generateToken"
+        }
+      }      
     }
   }
 }

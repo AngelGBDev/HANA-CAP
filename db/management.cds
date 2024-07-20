@@ -89,10 +89,7 @@ entity TransferStatusSet {
 }
 
 entity TransferTypeSet {
-    key id          : String(20) enum {
-            EQUIPMENT = 'EQUIPMENT';
-            BACKREST  = 'BACKREST';
-        };
+    key id          : String(20);
         description : String;
 }
 
@@ -112,14 +109,61 @@ entity TransferRequestLogSet: managed {
         transferRequest     : Association to models.TransferRequestSet;
 }
 
-entity PredioSet: managed {    
-    key id                  : UUID;
-};
-
 entity RolSet {
     key rol         : String;
         description : String;
 }
+
+// Entidades puentes de MII
+entity CamionesSet {
+    division        : String;
+    empresario      : String;
+    dsc_proveedor   : String;
+    proceso         : String;
+    turno           : String;
+    tipo_camion     : String;
+    tipo_carro      : String;
+    tipo_empresa    : String;
+    patente         : String;
+    division_origen : String;
+    equipo_sigla    : String;
+}
+
+entity DistanciaSet {    
+    key id_distancia    : String;
+    division            : String;
+    cod_almacen_origen  : String;
+    cod_almacen_destino : String;
+    identificador_ruta  : String;
+    descripcion_ruta    : String;
+}
+
+entity ProveedorSet {
+    key id_proveedor    : String;
+    cod_proveedor_sap   : String;
+    rut                 : String;
+    dsc_proveedor       : String;
+}
+
+entity OperadoresSet {    
+    division            : String;
+    cod_operador_ftk    : String;
+    rut                 : String;
+    nombre              : String;
+    cod_sap_empresario  : String;
+    proceso             : String;
+}
+
+// Entidades puentes de ARCGIS
+entity PredioSet: managed {
+    objectid    : String; 
+    idzona      : String;
+    zona        : String;
+    idpredio    : String;
+    predio      : String;
+    idcancha    : String;
+    cancha      : String;
+};
 
 view UserRolViewSet as
     select from models.UserSet as User

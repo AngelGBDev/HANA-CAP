@@ -12,8 +12,12 @@ service ManagementService {
     entity TransferTypeSet          as projection on models.TransferTypeSet;
     entity UserSet                  as projection on models.UserSet;
     entity TransferRequestLogSet    as projection on models.TransferRequestLogSet;
-    entity PrediosSet               as projection on models.PredioSet;
     entity RolSet                   as projection on models.RolSet;
     entity UserRolViewSet           as projection on models.UserRolViewSet;
+    entity CamionesSet              as projection on models.CamionesSet;
+    entity DistanciaSet             as projection on models.DistanciaSet;
+    entity ProveedorSet             as projection on models.ProveedorSet;    
+    entity OperadoresSet            as projection on models.OperadoresSet;
+    entity PrediosSet               as projection on models.PredioSet;
     // function getUser() returns types.User;
 }
