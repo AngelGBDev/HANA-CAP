@@ -1,23 +1,13 @@
 {
-    "[production]": {
-        "requires": {
-            "sap-odata-service": {
-                "kind": "odata-v2",
-                "csrf": true,
-                "credentials": {
-                    "destination": "MII_FOR_TRASLADO",
-                    "path": "/sap/opu/odata/sap/ZPM_FOR_TELEMETRIA_SRV",
-                    "forwardAuthToken": true
-                }
-            },
-            "API": {
-                "MII_SERV": {
-                  "url": "https://api.example.com"
-                },
-                "anotherApi": {
-                  "url": "https://another.api.example.com"
-                }
-              }
+  "[production]": {
+    "requires": {
+      "ZPM_FOR_TRASLADO_SRV": {
+        "kind": "odata",
+        "model": "srv/external/ZPM_FOR_TRASLADO_SRV",
+        "credentials": {
+          "destination": "ZPM_FOR_TRASLADO_SRV"
         }
-    }       
+      }   
+    }
+  }       
 }

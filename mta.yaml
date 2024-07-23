@@ -27,7 +27,13 @@ modules:
     requires:
       - name: equipment-transfer-backend-auth
       - name: equipment-transfer-backend-db
-
+      - name: equipment-transfer-backend-destination
+      - name: equipment-transfer-backend-connectivity-service
+    properties:
+      SAP_JWT_TRUST_ACL:
+      - clientid: "*"
+        identityzone: "*"
+        
   - name: equipment-transfer-backend-db-deployer
     type: hdb
     path: gen/db
@@ -51,6 +57,10 @@ modules:
           url: ~{srv-url}
           forwardAuthToken: true
       - name: equipment-transfer-backend-auth
+    properties:
+      SAP_JWT_TRUST_ACL:
+      - clientid: "*"
+        identityzone: "*"
 
 resources:
   - name: equipment-transfer-backend-auth
@@ -67,3 +77,15 @@ resources:
     parameters:
       service: hana
       service-plan: hdi-shared
+  - name: equipment-transfer-backend-destination
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: destination
+      service-plan: lite
+    properties:
+      destination-name: SAP_CORP
+  - name: equipment-transfer-backend-connectivity-service
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service-plan: lite
+      service: connectivity

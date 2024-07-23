@@ -7,7 +7,10 @@
   "private": true,
   "dependencies": {
     "@sap-cloud-sdk/core": "^1.54.2",
-    "@sap/cds": "^7",
+    "@sap-cloud-sdk/http-client": "^3.16.0",
+    "@sap-cloud-sdk/resilience": "^3.16.0",
+    "@sap-cloud-sdk/util": "^3.16.0",
+    "@sap/cds": "^7.9.4",
     "@sap/cds-hana": "^2",
     "@sap/xssec": "^3",
     "axios": "^1.7.2",
@@ -33,13 +36,16 @@
   },
   "cds": {
     "requires": {
-      "auth": "dummy",
+      "auth": "mocked",
       "db": "hana",
       "ZPM_FOR_TRASLADO_SRV": {
-        "kind": "odata",
-        "model": "srv/external/SAP_CORP",
+        "kind": "odata-v2",
+        "model": "srv/external/ZPM_FOR_TRASLADO_SRV",
+        "csrf": true,
         "credentials": {
-          "destination": "SAP_CORP"
+          "destination": "SAP_CORP",
+          "path": "/sap/opu/odata/sap/ZPM_FOR_TRASLADO_SRV",
+          "forwardAuthToken": true
         }
       },
       "MII_SERV": {
@@ -48,18 +54,18 @@
           "url": "https://reservasqas.arauco.com/XMII/SOAPRunner/IPFOREST/TRANSACTION/Mantenimiento"
         }
       },
-      "ARCGIS_SERV":{
+      "ARCGIS_SERV": {
         "kind": "rest",
         "credentials": {
           "url": "https://araucaria-qas.arauco.com/server/rest/services/Integraciones/CanchasBTP/MapServer/0/query"
         }
       },
-      "ARCGIS_TOKEN_SERV":{
+      "ARCGIS_TOKEN_SERV": {
         "kind": "rest",
         "credentials": {
           "url": "https://araucaria-qas.arauco.com/portal/sharing/rest/generateToken"
         }
-      }      
+      }
     }
   }
 }

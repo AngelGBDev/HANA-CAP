@@ -5,12 +5,17 @@ const convert = require('xml-js');
 const https  = require('https');
 const { json } = require('express');
 // const querystring  = require('querystring');
-
+const { executeHttpRequest } = require('@sap-cloud-sdk/http-client');
+const { resilience } = require('@sap-cloud-sdk/resilience');
 
 class ManagementService extends cds.ApplicationService {
     /** Registering custom event handlers */
-    init() {
-        const { TransferRequestSet, TransferRequestLogSet, PrediosSet, UserSet, CamionesSet, DistanciaSet, ProveedorSet, OperadoresSet } = this.entities;
+    async init() {
+        const { 
+            TransferRequestSet, TransferRequestLogSet, PrediosSet, CamionesSet, DistanciaSet, ProveedorSet, OperadoresSet,
+            EquipmentSet, EquipmentInstallSet, EquipmentTypeSet, FunctionalLocationSet, MaintenancePlantSet
+         } = this.entities;
+        const api = await cds.connect.to('ZPM_FOR_TRASLADO_SRV');   
 
         this.after("CREATE", TransferRequestSet, async (data) => {
 
@@ -69,6 +74,45 @@ class ManagementService extends cds.ApplicationService {
             let aResult = this.getOperadores();        
             
             return aResult;
+        });
+        
+        this.on("READ", EquipmentSet, async (req) => {                                             
+            const result = await api.get('/EquipmentSet');
+
+            return result;
+        });
+        
+        this.on("READ", EquipmentInstallSet, async (req) => {
+            
+            const headers = { "X-Requested-With": "X" };
+            const result = await api.send('GET', '/EquipmentInstallSet', headers);
+            console.log("result", JSON.stringify(result));
+
+            return result;
+        });
+                
+        this.on("READ", EquipmentTypeSet, async (req) => {
+                                             
+            const headers = { "X-Requested-With": "X" };
+            const result = await api.send('GET', '/EquipmentTypeSet', headers);
+
+            return result;
+        });
+
+        this.on("READ", FunctionalLocationSet, async (req) => {
+                                             
+            const headers = { "X-Requested-With": "X" };
+            const result = await api.send('GET', '/FunctionalLocationSet', headers);
+
+            return result;
+        });
+
+        this.on("READ", MaintenancePlantSet, async (req) => {
+                                             
+            const headers = { "X-Requested-With": "X" };
+            const result = await api.send('GET', '/MaintenancePlantSet', headers);
+
+            return result;
         });
         
         return super.init();

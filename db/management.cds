@@ -1,6 +1,8 @@
 // using {db.types} from '../../../db/types';
 using {managed, sap.common.CodeList} from '@sap/cds/common';
 
+using { ZPM_FOR_TRASLADO_SRV as external } from '../srv/external/ZPM_FOR_TRASLADO_SRV';
+
 namespace db.models;
 
 entity LogSet: managed {
@@ -165,12 +167,66 @@ entity PredioSet: managed {
     cancha      : String;
 };
 
-view UserRolViewSet as
-    select from models.UserSet as User
-    join models.RolSet as Rol
-    on User.rol = Rol.rol {
-        User.name,
-        User.email,
-        Rol.rol,
-        User.createdAt
-    };
+// Entidades ODATA
+entity DeliveryHeaderSet as projection on external.DeliveryHeaderSet {
+    key DeliveryId,
+    EquipmentId,
+    TransportId,
+    AddressSource,
+    AddressDestination,
+    Driver,
+    RutDriver,
+    ReferenceDocumentNumber,
+};
+
+entity EquipmentSet as projection on external.EquipmentSet {
+    key EquipmentId,
+    EquipmentDesc,
+    PlanningPlantId,
+    MaintenancePlantId,
+    MaintenancePlantDesc,
+    FunctionalLocationId,
+    FunctionalLocationLabel,
+    FunctionalLocationDesc,
+    ManufacturerModelNumber,
+    VendorNumber,
+    ManufacturerSerialNumber,
+}
+
+entity EquipmentInstallSet as projection on external.EquipmentInstallSet {
+    key EquipmentId,
+    FunctionalLocationId,
+    MaintenancePlantId,
+    FunctionalLocationLabelSource,
+    MaintenancePlantIdSource,
+}
+
+
+entity EquipmentTypeSet as projection on external.EquipmentTypeSet {
+    key TypeId,
+    Description,
+};
+
+entity FunctionalLocationSet as projection on external.FunctionalLocationSet {
+    key FunctionalLocationId,
+    FunctionalLocationLabel,
+    FunctionalLocationDesc,
+    PlanningPlantId,
+    MaintenancePlantId,
+    MaintenancePlantDesc,
+};
+
+entity MaintenancePlantSet as projection on external.MaintenancePlantSet {
+    key MaintenancePlantId,
+    MaintenancePlantDesc,
+};
+
+// view UserRolViewSet as
+//     select from models.UserSet as User
+//     join models.RolSet as Rol
+//     on User.rol = Rol.rol {
+//         User.name,
+//         User.email,
+//         Rol.rol,
+//         User.createdAt
+//     };
